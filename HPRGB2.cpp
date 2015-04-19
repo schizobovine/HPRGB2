@@ -19,7 +19,7 @@ L* = 116(Y/Yn)^1/3 - 16 , Y/Yn > 0.008856
 L* = 903.3(Y/Yn), Y/Yn <= 0.008856
 */
 //lookup table for 256 CIE lab brightness corrected values with 12 bit resolution
-prog_uint16_t CIEL_8_12[] PROGMEM = {
+const prog_uint16_t CIEL_8_12[] PROGMEM = {
         0,2,4,5,7,9,11,12,14,16,18,20,21,23,25,27,28,30,32,34,36,37,39,41,43,45,47,49,52,54,56,59,61,64,66,69,72,75,77,80,83,87,90,93,97,100,103,107,111,115,118,122,126,
         131,135,139,144,148,153,157,162,167,172,177,182,187,193,198,204,209,215,221,227,233,239,246,252,259,265,272,279,286,293,300,308,315,323,330,338,346,354,362,371,
         379,388,396,405,414,423,432,442,451,461,471,480,490,501,511,521,532,543,554,565,576,587,599,610,622,634,646,658,670,683,696,708,721,734,748,761,775,789,802,817,
@@ -29,7 +29,7 @@ prog_uint16_t CIEL_8_12[] PROGMEM = {
         3284,3320,3356,3393,3430,3467,3504,3542,3579,3617,3656,3694,3733,3773,3812,3852,3892,3932,3973,4013,4055,4095};
 
 //lookup table for 1024 CIE lab brightness corrected values with 12 bit resolution
-prog_uint16_t CIEL_10_12[] PROGMEM = {
+const prog_uint16_t CIEL_10_12[] PROGMEM = {
 	0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 12, 13, 13, 14, 14, 15, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19, 19, 20, 20, 21,
 	21, 22, 22, 23, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 27, 28, 28, 29, 29, 30, 30, 31, 31, 31, 32, 32, 33, 33, 34, 34, 35, 35, 35, 36, 36, 37, 37, 38, 38, 39, 39, 39, 40,
 	40, 41, 41, 42, 42, 43, 43, 44, 44, 45, 45, 46, 46, 47, 47, 48, 49, 49, 50, 50, 51, 51, 52, 52, 53, 54, 54, 55, 55, 56, 56, 57, 58, 58, 59, 59, 60, 61, 61, 62, 63, 63, 64,
@@ -239,7 +239,7 @@ void HPRGB::setPWMFrequency(uint16_t freq)
 //Acquire TMP421 internal temperature in Degrees Celsius
 float HPRGB::getIntTemp()
 {
-  uint8_t hiTemp, lowTemp;
+  uint8_t hiTemp = 0, lowTemp = 0;
   Wire.beginTransmission(TMP421_ADDR);
   Wire.write((byte)0x00);
   Wire.endTransmission();
@@ -261,7 +261,7 @@ float HPRGB::getIntTempF()
 //Acquire TMP421 remote temperature in Degrees Celsius
 float HPRGB::getExtTemp()
 {
-  uint8_t hiTemp, lowTemp;
+  uint8_t hiTemp = 0, lowTemp = 0;
   Wire.beginTransmission(TMP421_ADDR);
   Wire.write(0x01);
   Wire.endTransmission();
@@ -434,6 +434,7 @@ uint16_t HPRGB::pca9685GetPWM(uint8_t channel)
     uint8_t offHi = Wire.read();
     return (word((offHi & 0B00001111), offLow) - word((onHi & 0B00001111), onLow));
   }
+  return 0;
 }
 /*
 HSV to RGB adopted from cyzRGB and adafruit
